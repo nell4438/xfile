@@ -1,14 +1,14 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "*.html",
-        "use": "@vercel/static"
-      }
-    ],
-    "env": {
-      "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "@emailjs_public_key",
-      "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "@emailjs_service_id",
-      "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "@emailjs_template_id"
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
     }
+  ],
+  "env": {
+    "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "szXttbPtg9ecm_EUA",
+    "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_f165zzq",
+    "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_0st30ey"
   }
+}
