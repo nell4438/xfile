@@ -1,11 +1,7 @@
-const publicKey = process.env.NEXT_PUBLIC_PUBLICKEY;
-const serviceId = process.env.NEXT_PUBLIC_SERVICEID;
-const templateId = process.env.NEXT_PUBLIC_TEMPLATEID;
-
 const config = {
     emailjs: {
-        publicKey: publicKey,
-        serviceId: serviceId,
-        templateId: templateId
+        publicKey: 'szXttbPtg9ecm_EUA',
+        serviceId: 'service_f165zzq',
+        templateId: 'template_0st30ey'
     }
 };
