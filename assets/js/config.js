@@ -5,4 +5,3 @@ const config = {
         templateId: '${process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID}'
     }
 };
-`;
