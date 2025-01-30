@@ -127,7 +127,6 @@
             border-radius: 30px;
             cursor: pointer;
             transition: var(--transition);
-            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             animation: fadeInUp 1s ease 0.6s;
@@ -825,11 +824,20 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            nav {
+                justify-content: space-between;
+                padding: 1rem 5%;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
             .hero-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-
+            .desktop-menu {
+                display: none;
+            }
             .resume-button {
                 width: 100%;
                 justify-content: center;
@@ -847,14 +855,15 @@
                 display: block;
             }
             .mobile-menu ul {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
                 list-style: none;
+                padding: 0;
+                margin: 0;
             }
         
             .mobile-menu ul li {
+                padding: 0.5rem 0;
                 text-align: center;
+                border-bottom: 1px solid var(--form-border);
             }
         
             .mobile-menu ul li a {
@@ -863,14 +872,21 @@
                 font-size: 1.1rem;
                 display: block;
                 padding: 0.5rem;
+                transition: color 0.3s ease;
             }
-        
+            .mobile-menu ul li a:hover {
+                color: var(--accent-color);
+            }
             .mobile-menu .theme-toggle {
-                margin: 1rem auto;
                 display: block;
+                margin: 1rem auto;
+                font-size: 1.5rem;
             }
             .hero-content h1 {
                 font-size: 2.5rem;
+            }
+            .mobile-menu ul li:last-child {
+                border-bottom: none;
             }
         }
         .nav-toggle {
@@ -883,6 +899,11 @@
             padding: 0.5rem;
             z-index: 1000;
         }
+        .desktop-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
         .mobile-menu {
             display: none;
             position: fixed;
@@ -893,13 +914,13 @@
             padding: 1rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-            transform: translateY(-100%);
+            z-index: 999;
+            transform: translateY(-150%);
+            transition: transform 0.3s ease-in-out;
         }
         
         .mobile-menu.active {
             transform: translateY(0);
-            display: block;
         }
     </style>
     <title>Punzalan</title>
@@ -907,36 +928,36 @@
 
 <body>
 <header>
-<nav>
-    <div class="logo">
-        <a href="javascript:location.reload();">Ronn's Portfolio</a>
+    <nav>
+        <div class="logo">
+            <a href="javascript:location.reload();">Ronn's Portfolio</a>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="desktop-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </li>
+        </ul>
+    </nav>
+    <div class="mobile-menu">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button id="mobile-theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu">
-        <i class="fas fa-bars"></i>
-    </button>
-    <ul class="desktop-menu">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li>
-            <button id="theme-toggle" class="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
-        </li>
-    </ul>
-</nav>
-<div class="mobile-menu">
-    <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button id="mobile-theme-toggle" class="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </button>
-</div>
 </header>
 
     <section id="home" class="hero">
@@ -965,7 +986,7 @@
                 <p class="tagline">Full Stack Developer | Problem Solver </p>
 
                 <p class="main-description">
-                    🚀 Full Stack Developer with 3 years of crafting digital excellence from the Philippines. I
+                    🚀 Full Stack Developer with 5 years of crafting digital excellence from the Philippines. I
                     transform challenges into opportunities using <span class="highlight">HTML5, CSS3, JavaScript, PHP,
                         Laravel, and Node.js who loves to explore new things. </span>. <br><b>My mission:</b> building
                     powerful, user-friendly web solutions that make a lasting impact in the digital landscape.
@@ -1209,7 +1230,8 @@
         const mobileThemeIcon = mobileThemeToggle.querySelector('i');
 
         // Toggle mobile menu
-        navToggle.addEventListener('click', () => {
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             mobileMenu.classList.toggle('active');
             const icon = navToggle.querySelector('i');
             icon.classList.toggle('fa-bars');
@@ -1255,24 +1277,24 @@
         }
 
         // Handle window resize
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
-        mobileMenu.classList.remove('active');
-        const icon = navToggle.querySelector('i');
-        icon.classList.add('fa-bars');
-        icon.classList.remove('fa-times');
-    }
-});
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && 
-                !navToggle.contains(e.target) && 
-                mobileMenu.classList.contains('active')) {
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && mobileMenu.classList.contains('active')) {
                 mobileMenu.classList.remove('active');
                 const icon = navToggle.querySelector('i');
                 icon.classList.add('fa-bars');
                 icon.classList.remove('fa-times');
             }
         });
+document.addEventListener('click', (e) => {
+    if (!mobileMenu.contains(e.target) && 
+        !navToggle.contains(e.target) && 
+        mobileMenu.classList.contains('active')) {
+        mobileMenu.classList.remove('active');
+        const icon = navToggle.querySelector('i');
+        icon.classList.add('fa-bars');
+        icon.classList.remove('fa-times');
+    }
+});
         // Check for saved theme preference
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
