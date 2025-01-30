@@ -853,6 +853,12 @@
             }
             .mobile-menu {
                 display: block;
+               transform: translateY(0);
+                
+            }
+            .breadcrumb-nav {
+                margin: 0;
+                padding: 0.5rem;
             }
             .mobile-menu ul {
                 list-style: none;
@@ -911,15 +917,61 @@
             left: 0;
             right: 0;
             background: var(--nav-bg);
-            padding: 1rem;
+            padding: 0.5rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             z-index: 999;
-            transform: translateY(-150%);
-            transition: transform 0.3s ease-in-out;
+        }
+        .breadcrumb-nav {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.5rem;
+            gap: 0.5rem;
         }
         
+        .breadcrumb-nav li {
+            display: inline-flex;
+            align-items: center;
+        }
+        .mobile-theme-toggle {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--accent-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .breadcrumb-nav li:not(:last-child)::after {
+            content: '/';
+            margin: 0 0.5rem;
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+        
+        .breadcrumb-nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .breadcrumb-nav a:hover {
+            background: var(--accent-color);
+            color: white;
+        }
         .mobile-menu.active {
+            display: block;
             transform: translateY(0);
         }
     </style>
@@ -948,16 +1000,16 @@
         </ul>
     </nav>
     <div class="mobile-menu">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <button id="mobile-theme-toggle" class="theme-toggle">
-            <i class="fas fa-moon"></i>
-        </button>
-    </div>
+    <ul class="breadcrumb-nav">
+        <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
+        <li><a href="#projects"><i class="fas fa-code"></i> Projects</a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+</div>
+<button id="mobile-theme-toggle" class="mobile-theme-toggle">
+    <i class="fas fa-moon"></i>
+</button>
 </header>
 
     <section id="home" class="hero">
@@ -1260,6 +1312,26 @@
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
 
+        function updateActiveBreadcrumb() {
+            const sections = ['home', 'about', 'projects', 'contact'];
+            const scrollPosition = window.scrollY;
+        
+            sections.forEach(section => {
+                const element = document.getElementById(section);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    const link = document.querySelector(`.breadcrumb-nav a[href="#${section}"]`);
+                    
+                    if (rect.top <= 100 && rect.bottom >= 100) {
+                        link.style.background = 'var(--accent-color)';
+                        link.style.color = 'white';
+                    } else {
+                        link.style.background = 'transparent';
+                        link.style.color = 'var(--text-color)';
+                    }
+                }
+            });
+        }
         function toggleTheme() {
             const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -1332,12 +1404,25 @@ document.addEventListener('click', (e) => {
 
         // Add scroll event listener
         window.addEventListener('scroll', () => {
-            handleScrollAnimation();
+            //handleScrollAnimation();
+            updateActiveBreadcrumb();
         });
-
+        window.addEventListener('load', updateActiveBreadcrumb);
         // Initialize scroll animation check
         handleScrollAnimation();
-
+        document.querySelectorAll('.breadcrumb-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
         // Form submission
         const form = document.getElementById('contact-form');
         const successMessage = document.getElementById('success-message');
